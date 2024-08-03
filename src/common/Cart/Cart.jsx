@@ -1,24 +1,18 @@
-import React from "react"
-import "./style.css"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './style.css';
 
 const Cart = ({ CartItem, addToCart, decreaseQty }) => {
-  // Stpe: 7   calucate total of items
-  const totalPrice = CartItem.reduce((price, item) => price + item.qty * item.price, 0)
+  const totalPrice = CartItem.reduce((price, item) => price + item.qty * item.price, 0);
 
-  // prodcut qty total
   return (
     <>
       <section className='cart-items'>
         <div className='container d_flex'>
-          {/* if hamro cart ma kunai pani item xaina bhane no diplay */}
-
           <div className='cart-details'>
-            {CartItem.length === 0 && <h1 className='no-items product'>No Items are add in Cart</h1>}
-
-            {/* yasma hami le cart item lai display garaaxa */}
+            {CartItem.length === 0 && <h1 className='no-items product'>No Items are added to Cart</h1>}
             {CartItem.map((item) => {
-              const productQty = item.price * item.qty
-
+              const productQty = item.price * item.qty;
               return (
                 <div className='cart-list product d_flex' key={item.id}>
                   <div className='img'>
@@ -37,9 +31,6 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         <i className='fa-solid fa-xmark'></i>
                       </button>
                     </div>
-                    {/* stpe: 5 
-                    product ko qty lai inc ra des garne
-                    */}
                     <div className='cartControl d_flex'>
                       <button className='incCart' onClick={() => addToCart(item)}>
                         <i className='fa-solid fa-plus'></i>
@@ -49,24 +40,27 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                       </button>
                     </div>
                   </div>
-
                   <div className='cart-item-price'></div>
                 </div>
-              )
+              );
             })}
           </div>
-
           <div className='cart-total product'>
             <h2>Cart Summary</h2>
-            <div className=' d_flex'>
+            <div className='d_flex'>
               <h4>Total Price :</h4>
               <h3>${totalPrice}.00</h3>
             </div>
+            {CartItem.length > 0 && (
+              <Link to={{ pathname: '/checkout', state: { cartItems: CartItem } }} className='btn btn-primary'>
+                Proceed to Checkout
+              </Link>
+            )}
           </div>
         </div>
       </section>
     </>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
