@@ -1,33 +1,36 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import "./SearchPage.scss";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { STATUS } from '../../utils/status';
 import Loader from '../../components/Loader/Loader';
 import ProductList from '../../components/ProductList/ProductList';
-import { fetchAsyncSearchProduct, getSearchProducts, setSearchTerm, getSearchProductsStatus, clearSearch } from '../../store/searchSlice';
+import { 
+  fetchAsyncSearchProduct, 
+  getSearchProducts, 
+  getSearchProductsStatus, 
+  clearSearch 
+} from '../../store/searchSlice';
 
 const SearchPage = () => {
   const dispatch = useDispatch();
-  const {searchTerm } = useParams();
+  const { searchTerm } = useParams();
   const searchProducts = useSelector(getSearchProducts);
   const searchProductsStatus = useSelector(getSearchProductsStatus);
 
   useEffect(() => {
     dispatch(clearSearch());
     dispatch(fetchAsyncSearchProduct(searchTerm));
-  }, [searchTerm]);
+  }, [searchTerm, dispatch]);
 
-  if(searchProducts.length === 0){
+  if (searchProducts.length === 0) {
     return (
-      <div className='container' style = {{
-        minHeight: "70vh"
-      }}>
+      <div className='container' style={{ minHeight: "70vh" }}>
         <div className='fw-5 text-danger py-5'>
-  
+          {/* You can add a message here if you want to show something when no products are found */}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -39,14 +42,12 @@ const SearchPage = () => {
               <h3>Search results:</h3>
             </div>
             <br />
-            {
-              searchProductsStatus === STATUS.LOADING ? <Loader /> : <ProductList products = {searchProducts} />
-            }
+            {searchProductsStatus === STATUS.LOADING ? <Loader /> : <ProductList products={searchProducts} />}
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
 
 export default SearchPage;
